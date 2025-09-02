@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="8.45.1">
+<file name="C:\develop\java\filestorage\src\main\java\com\example\controller\dto\EventDTO.java">
+</file>
+<file name="C:\develop\java\filestorage\src\main\java\com\example\controller\dto\FileDTO.java">
+</file>
+<file name="C:\develop\java\filestorage\src\main\java\com\example\controller\dto\UserDTO.java">
+</file>
+<file name="C:\develop\java\filestorage\src\main\java\com\example\controller\EventServlet.java">
+</file>
+<file name="C:\develop\java\filestorage\src\main\java\com\example\controller\FileServlet.java">
+</file>
+<file name="C:\develop\java\filestorage\src\main\java\com\example\controller\UserFilter.java">
+</file>
+<file name="C:\develop\java\filestorage\src\main\java\com\example\controller\UserServlet.java">
+</file>
+<file name="C:\develop\java\filestorage\src\main\java\com\example\model\Event.java">
+</file>
+<file name="C:\develop\java\filestorage\src\main\java\com\example\model\File.java">
+</file>
+<file name="C:\develop\java\filestorage\src\main\java\com\example\model\User.java">
+</file>
+<file name="C:\develop\java\filestorage\src\main\java\com\example\repository\GenericRepository.java">
+</file>
+<file name="C:\develop\java\filestorage\src\main\java\com\example\repository\HibernateRepository.java">
+</file>
+<file name="C:\develop\java\filestorage\src\main\java\com\example\repository\RepositoryException.java">
+</file>
+<file name="C:\develop\java\filestorage\src\main\java\com\example\util\FileStorageServletContextListener.java">
+</file>
+<file name="C:\develop\java\filestorage\src\main\java\com\example\util\RepositoryProvider.java">
+</file>
+<file name="C:\develop\java\filestorage\src\main\java\com\example\util\RepositoryProviderImpl.java">
+</file>
+</checkstyle>

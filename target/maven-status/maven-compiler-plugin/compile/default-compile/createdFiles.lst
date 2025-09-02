@@ -1,0 +1,16 @@
+com\example\model\File.class
+com\example\repository\RepositoryException.class
+com\example\controller\UserServlet.class
+com\example\controller\UserFilter.class
+com\example\controller\EventServlet.class
+com\example\repository\HibernateRepository.class
+com\example\controller\FileServlet.class
+com\example\controller\dto\UserDTO.class
+com\example\util\FileStorageServletContextListener.class
+com\example\controller\dto\FileDTO.class
+com\example\util\RepositoryProviderImpl.class
+com\example\controller\dto\EventDTO.class
+com\example\util\RepositoryProvider.class
+com\example\model\Event.class
+com\example\repository\GenericRepository.class
+com\example\model\User.class
