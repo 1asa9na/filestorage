@@ -1,5 +1,7 @@
-package com.example.repository;
+package com.example.repository.hibernate;
 
+import com.example.repository.GenericRepository;
+import com.example.repository.RepositoryException;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -65,34 +67,43 @@ public class HibernateRepository<T, ID> implements GenericRepository<T, ID> {
 
     @Override
     public T save(T entity) throws RepositoryException {
-        try (EntityManager em = getNewEntityManager()) {
-            EntityTransaction tx = em.getTransaction();
+        EntityManager em = getNewEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try {
             tx.begin();
             em.persist(entity);
             tx.commit();
             return entity;
         } catch (IllegalArgumentException | EntityExistsException | TransactionRequiredException e) {
+            tx.rollback();
             throw new RepositoryException(e.getMessage(), e);
+        } finally {
+            em.close();
         }
     }
 
     @Override
     public T update(T entity) throws RepositoryException {
-        try (EntityManager em = getNewEntityManager()) {
-            EntityTransaction tx = em.getTransaction();
+        EntityManager em = getNewEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try {
             tx.begin();
             em.merge(entity);
             tx.commit();
             return entity;
         } catch (IllegalArgumentException | EntityExistsException | TransactionRequiredException e) {
+            tx.rollback();
             throw new RepositoryException(e.getMessage(), e);
+        } finally {
+            em.close();
         }
     }
 
     @Override
     public void deleteById(ID id) throws RepositoryException {
-        try (EntityManager em = getNewEntityManager()) {
-            EntityTransaction tx = em.getTransaction();
+        EntityManager em = getNewEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try {
             tx.begin();
             T entity = em.find(entityClass, id);
             if (entity != null) {
@@ -108,7 +119,10 @@ public class HibernateRepository<T, ID> implements GenericRepository<T, ID> {
             }
             tx.commit();
         } catch (IllegalArgumentException | TransactionRequiredException e) {
+            tx.rollback();
             throw new RepositoryException(e.getMessage(), e);
+        } finally {
+            em.close();
         }
     }
 }

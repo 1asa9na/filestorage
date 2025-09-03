@@ -1,10 +1,11 @@
 package com.example.util;
 
-import com.example.model.Event;
-import com.example.model.File;
-import com.example.model.User;
-import com.example.repository.GenericRepository;
-import com.example.repository.HibernateRepository;
+import com.example.repository.EventRepository;
+import com.example.repository.FileRepository;
+import com.example.repository.UserRepository;
+import com.example.repository.hibernate.HibernateEventRepositoryImpl;
+import com.example.repository.hibernate.HibernateFileRepositoryImpl;
+import com.example.repository.hibernate.HibernateUserRepositoryImpl;
 import com.google.gson.GsonBuilder;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -25,12 +26,12 @@ public class FileStorageServletContextListener implements ServletContextListener
      */
 
     public void contextInitialized(ServletContextEvent sce) {
-        GenericRepository<User, Integer> ur
-            = new HibernateRepository<User, Integer>(emf, User.class);
-        GenericRepository<Event, Integer> er
-            = new HibernateRepository<Event, Integer>(emf, Event.class);
-        GenericRepository<File, Integer> fr
-            = new HibernateRepository<File, Integer>(emf, File.class);
+        UserRepository ur
+            = new HibernateUserRepositoryImpl(emf);
+        EventRepository er
+            = new HibernateEventRepositoryImpl(emf);
+        FileRepository fr
+            = new HibernateFileRepositoryImpl(emf);
         RepositoryProvider provider = new RepositoryProviderImpl(sce.getServletContext());
         provider.setUserRepository(ur);
         provider.setEventRepository(er);

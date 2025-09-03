@@ -1,9 +1,8 @@
 package com.example.util;
 
-import com.example.model.Event;
-import com.example.model.File;
-import com.example.model.User;
-import com.example.repository.GenericRepository;
+import com.example.repository.EventRepository;
+import com.example.repository.FileRepository;
+import com.example.repository.UserRepository;
 
 /**
  * Interface for providing repository instances.
@@ -11,15 +10,15 @@ import com.example.repository.GenericRepository;
 
 public interface RepositoryProvider {
 
-    GenericRepository<User, Integer> getUserRepository();
+    UserRepository getUserRepository();
 
-    GenericRepository<Event, Integer> getEventRepository();
+    EventRepository getEventRepository();
 
-    GenericRepository<File, Integer> getFileRepository();
+    FileRepository getFileRepository();
 
-    void setUserRepository(GenericRepository<User, Integer> repository);
+    void setUserRepository(UserRepository repository);
 
-    void setEventRepository(GenericRepository<Event, Integer> repository);
+    void setEventRepository(EventRepository repository);
 
-    void setFileRepository(GenericRepository<File, Integer> repository);
+    void setFileRepository(FileRepository repository);
 }

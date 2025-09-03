@@ -1,9 +1,8 @@
 package com.example.util;
 
-import com.example.model.Event;
-import com.example.model.File;
-import com.example.model.User;
-import com.example.repository.GenericRepository;
+import com.example.repository.EventRepository;
+import com.example.repository.FileRepository;
+import com.example.repository.UserRepository;
 import jakarta.servlet.ServletContext;
 
 /**
@@ -12,41 +11,41 @@ import jakarta.servlet.ServletContext;
 
 public class RepositoryProviderImpl implements RepositoryProvider {
 
-    private GenericRepository<User, Integer> userRepository;
-    private GenericRepository<Event, Integer> eventRepository;
-    private GenericRepository<File, Integer> fileRepository;
+    private UserRepository userRepository;
+    private EventRepository eventRepository;
+    private FileRepository fileRepository;
 
     public RepositoryProviderImpl(ServletContext context) {
         context.setAttribute("REPO_PRVDR", this);
     }
 
     @Override
-    public GenericRepository<User, Integer> getUserRepository() {
+    public UserRepository getUserRepository() {
         return userRepository;
     }
 
     @Override
-    public GenericRepository<Event, Integer> getEventRepository() {
+    public EventRepository getEventRepository() {
         return eventRepository;
     }
 
     @Override
-    public GenericRepository<File, Integer> getFileRepository() {
+    public FileRepository getFileRepository() {
         return fileRepository;
     }
 
     @Override
-    public void setUserRepository(GenericRepository<User, Integer> repository) {
+    public void setUserRepository(UserRepository repository) {
         this.userRepository = repository;
     }
 
     @Override
-    public void setEventRepository(GenericRepository<Event, Integer> repository) {
+    public void setEventRepository(EventRepository repository) {
         this.eventRepository = repository;
     }
 
     @Override
-    public void setFileRepository(GenericRepository<File, Integer> repository) {
+    public void setFileRepository(FileRepository repository) {
         this.fileRepository = repository;
     }
 }
