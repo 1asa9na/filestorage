@@ -42,7 +42,8 @@ public class UserServlet extends HttpServlet {
     ) throws ServletException, IOException {
         response.setContentType("application/json");
         String param = request.getParameter("id");
-        try (PrintWriter out = response.getWriter()) {
+        PrintWriter out = response.getWriter();
+        try {
             if (param == null) {
                 List<UserDTO> users = repository.getAll().stream().map(u -> new UserDTO(u)).toList();
                 String json = gsonBuilder.create().toJson(users, List.class);
@@ -57,7 +58,12 @@ public class UserServlet extends HttpServlet {
             }
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (NumberFormatException | IndexOutOfBoundsException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        } catch (RepositoryException e) {
+            out.write("{\"error\": \"" + e.getMessage() + "\"}");
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        } finally {
+            out.close();
         }
     }
 
@@ -77,9 +83,9 @@ public class UserServlet extends HttpServlet {
             out.write(json);
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (IllegalStateException | IllegalArgumentException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } catch (RepositoryException e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -99,9 +105,9 @@ public class UserServlet extends HttpServlet {
             out.write(json);
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (IllegalStateException | IllegalArgumentException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } catch (RepositoryException e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -120,9 +126,9 @@ public class UserServlet extends HttpServlet {
             repository.deleteById(id);
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (IllegalStateException | IllegalArgumentException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } catch (RepositoryException e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 }

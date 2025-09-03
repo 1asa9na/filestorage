@@ -74,7 +74,9 @@ public class HibernateRepository<T, ID> implements GenericRepository<T, ID> {
             em.persist(entity);
             tx.commit();
             return entity;
-        } catch (IllegalArgumentException | EntityExistsException | TransactionRequiredException e) {
+        } catch (IllegalArgumentException
+            | EntityExistsException
+            | TransactionRequiredException e) {
             tx.rollback();
             throw new RepositoryException(e.getMessage(), e);
         } finally {
@@ -91,7 +93,9 @@ public class HibernateRepository<T, ID> implements GenericRepository<T, ID> {
             em.merge(entity);
             tx.commit();
             return entity;
-        } catch (IllegalArgumentException | EntityExistsException | TransactionRequiredException e) {
+        } catch (IllegalArgumentException
+            | EntityExistsException
+            | TransactionRequiredException e) {
             tx.rollback();
             throw new RepositoryException(e.getMessage(), e);
         } finally {

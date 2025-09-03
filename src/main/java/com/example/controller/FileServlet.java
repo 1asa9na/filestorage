@@ -41,7 +41,8 @@ public class FileServlet extends HttpServlet {
             HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json");
         String param = request.getParameter("id");
-        try (PrintWriter out = response.getWriter()) {
+        PrintWriter out = response.getWriter();
+        try {
             if (param == null) {
                 List<FileDTO> files = repository.getAll().stream().map(f -> new FileDTO(f)).toList();
                 String json = gsonBuilder.create().toJson(files, List.class);
@@ -56,7 +57,12 @@ public class FileServlet extends HttpServlet {
             }
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (NumberFormatException | IndexOutOfBoundsException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        } catch (RepositoryException e) {
+            out.write("{\"error\": \"" + e.getMessage() + "\"}");
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        } finally {
+            out.close();
         }
     }
 
@@ -74,9 +80,9 @@ public class FileServlet extends HttpServlet {
             out.write(json);
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (IllegalStateException | IllegalArgumentException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } catch (RepositoryException e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -94,9 +100,9 @@ public class FileServlet extends HttpServlet {
             out.write(json);
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (IllegalStateException | IllegalArgumentException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } catch (RepositoryException e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -114,9 +120,9 @@ public class FileServlet extends HttpServlet {
             repository.deleteById(id);
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (IllegalStateException | IllegalArgumentException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } catch (RepositoryException e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 }

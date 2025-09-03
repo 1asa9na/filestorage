@@ -15,6 +15,9 @@ public class UserDTO {
         name = user.getName();
     }
 
+    public UserDTO() {
+    }
+
     public Integer getId() {
         return id;
     }

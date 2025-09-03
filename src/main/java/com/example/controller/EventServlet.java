@@ -2,12 +2,8 @@ package com.example.controller;
 
 import com.example.controller.dto.EventDTO;
 import com.example.model.Event;
-import com.example.model.File;
-import com.example.model.User;
 import com.example.repository.EventRepository;
-import com.example.repository.FileRepository;
 import com.example.repository.RepositoryException;
-import com.example.repository.UserRepository;
 import com.example.util.RepositoryProvider;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -30,8 +26,6 @@ import java.util.List;
 public class EventServlet extends HttpServlet {
     private GsonBuilder gsonBuilder;
     private EventRepository eventRepository;
-    private UserRepository userRepository;
-    private FileRepository fileRepository;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -39,8 +33,6 @@ public class EventServlet extends HttpServlet {
         gsonBuilder = (GsonBuilder) getServletContext().getAttribute("GSON_BLDR");
         RepositoryProvider provider = (RepositoryProvider) getServletContext().getAttribute("REPO_PRVDR");
         eventRepository = provider.getEventRepository();
-        userRepository = provider.getUserRepository();
-        fileRepository = provider.getFileRepository();
     }
 
     @Override
@@ -72,7 +64,7 @@ public class EventServlet extends HttpServlet {
             } else if (userId == null && eventId != null) {
                 int id = Integer.parseInt(eventId);
                 EventDTO event = new EventDTO(eventRepository.getById(id));
-                String json = gsonBuilder.create().toJson(event, List.class);
+                String json = gsonBuilder.create().toJson(event, EventDTO.class);
                 System.out.println(json);
                 out.write(json);
                 response.setStatus(HttpServletResponse.SC_OK);
@@ -81,10 +73,10 @@ public class EventServlet extends HttpServlet {
             }
         } catch (IndexOutOfBoundsException | IllegalArgumentException e) {
             out.write("{\"error\": \"" + e.getMessage() + "\"}");
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } catch (RepositoryException e) {
             out.write("{\"error\": \"" + e.getMessage() + "\"}");
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         } finally {
             out.close();
         }
@@ -98,24 +90,17 @@ public class EventServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         try (BufferedReader reader = request.getReader()) {
             Gson gson = gsonBuilder.create();
-            EventDTO eventdto = gson.fromJson(reader, EventDTO.class);
-            File file = fileRepository.getById(eventdto.getFileId());
-            User user = userRepository.getById(eventdto.getUserId());
-            if (file == null || user == null) {
-                throw new IllegalArgumentException("Invalid arguments");
-            }
-            Event event = new Event();
-            event.setFile(file);
-            event.setUser(user);
-            String json = gson.toJson(new EventDTO(eventRepository.save(event)));
+            EventDTO event = gson.fromJson(reader, EventDTO.class);
+            Event e = eventRepository.save(event.getUserId(), event.getFileId());
+            String json = gson.toJson(new EventDTO(e));
             out.write(json);
             response.setStatus(HttpServletResponse.SC_OK);
-        } catch (IllegalStateException | IllegalArgumentException e) {
-            out.write("{\"error\": \"" + e.getMessage() + "\"}");
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
         } catch (RepositoryException e) {
             out.write("{\"error\": \"" + e.getMessage() + "\"}");
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        } catch (IllegalStateException | IllegalArgumentException e) {
+            out.write("{\"error\": \"" + e.getMessage() + "\"}");
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } finally {
             out.close();
         }
@@ -135,10 +120,10 @@ public class EventServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (IllegalStateException | IllegalArgumentException e) {
             out.write("{\"error\": \"" + e.getMessage() + "\"}");
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } catch (RepositoryException e) {
             out.write("{\"error\": \"" + e.getMessage() + "\"}");
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         } finally {
             out.close();
         }
@@ -157,10 +142,10 @@ public class EventServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (IllegalStateException | IllegalArgumentException e) {
             out.write("{\"error\": \"" + e.getMessage() + "\"}");
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } catch (RepositoryException e) {
             out.write("{\"error\": \"" + e.getMessage() + "\"}");
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         } finally {
             out.close();
         }

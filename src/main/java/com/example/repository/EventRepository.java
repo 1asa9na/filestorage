@@ -10,5 +10,6 @@ import java.util.List;
 public interface EventRepository extends GenericRepository<Event, Integer> {
 
     List<Event> findByUserId(Integer userId) throws RepositoryException;
+
     Event save(Integer userId, Integer fileId) throws RepositoryException;
 }

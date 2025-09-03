@@ -254,7 +254,7 @@
           </dependency>
         </dependencies>
         <configuration>
-          <url>jdbc:mysql://db:3306/filestorage</url>
+          <url>jdbc:mysql://localhost:3306/filestorage</url>
           <user>appuser</user>
           <password>apppass</password>
           <cleanDisabled>false</cleanDisabled>

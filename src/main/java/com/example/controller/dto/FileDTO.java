@@ -22,6 +22,9 @@ public class FileDTO {
         this.fileName = file.getName();
     }
 
+    public FileDTO() {
+    }
+
     public Integer getId() {
         return id;
     }

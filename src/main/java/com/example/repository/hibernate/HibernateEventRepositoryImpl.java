@@ -14,7 +14,6 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Root;
-
 import java.util.List;
 
 /**
@@ -46,13 +45,16 @@ public class HibernateEventRepositoryImpl extends HibernateRepository<Event, Int
     }
 
     @Override
-    public Event save(Integer userId, Integer fileId) {
+    public Event save(Integer userId, Integer fileId) throws RepositoryException {
         EntityManager em = getNewEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
             User user = em.find(User.class, userId);
             File file = em.find(File.class, fileId);
+            if (user == null || file == null) {
+                throw new IllegalArgumentException("User or File not found");
+            }
             Event event = new Event();
             event.setUser(user);
             event.setFile(file);
@@ -60,9 +62,10 @@ public class HibernateEventRepositoryImpl extends HibernateRepository<Event, Int
             tx.commit();
             return event;
         } catch (IllegalArgumentException
-        | IllegalStateException
-        | TransactionRequiredException
-        | EntityExistsException e) {
+            | IllegalStateException
+            | TransactionRequiredException
+            | EntityExistsException e
+        ) {
             tx.rollback();
             throw new RepositoryException(e.getMessage(), e);
         } finally {

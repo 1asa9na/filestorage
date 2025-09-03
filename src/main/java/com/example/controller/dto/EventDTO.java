@@ -26,6 +26,9 @@ public class EventDTO {
         this.fileName = event.getFile().getName();
     }
 
+    public EventDTO() {
+    }
+
     public Integer getId() {
         return id;
     }
