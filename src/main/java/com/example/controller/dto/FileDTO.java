@@ -9,7 +9,7 @@ import com.example.model.File;
 public class FileDTO {
     private Integer id;
     private String filePath;
-    private String fileName;
+    private String name;
 
     /**
      * Default constructor.
@@ -19,7 +19,7 @@ public class FileDTO {
     public FileDTO(File file) {
         this.id = file.getId();
         this.filePath = file.getFilePath();
-        this.fileName = file.getName();
+        this.name = file.getName();
     }
 
     public FileDTO() {
@@ -33,7 +33,7 @@ public class FileDTO {
         return filePath;
     }
 
-    public String getFileName() {
-        return fileName;
+    public String getName() {
+        return name;
     }
 }

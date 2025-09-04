@@ -72,4 +72,32 @@ public class HibernateEventRepositoryImpl extends HibernateRepository<Event, Int
             em.close();
         }
     }
+
+    @Override
+    public Event update(Integer userId, Integer fileId) throws RepositoryException {
+        EntityManager em = getNewEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            User user = em.find(User.class, userId);
+            File file = em.find(File.class, fileId);
+            if (user == null || file == null) {
+                throw new IllegalArgumentException("User or File not found");
+            }
+            Event event = new Event();
+            event.setUser(user);
+            event.setFile(file);
+            Event newEvent = em.merge(event);
+            tx.commit();
+            return newEvent;
+        } catch (IllegalArgumentException
+                | IllegalStateException
+                | TransactionRequiredException
+                | EntityExistsException e) {
+            tx.rollback();
+            throw new RepositoryException(e.getMessage(), e);
+        } finally {
+            em.close();
+        }
+    }
 }

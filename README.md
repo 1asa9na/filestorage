@@ -98,7 +98,7 @@ mvn clean package
 ## 📌 Swagger
 После запуска доступна Swagger-документация:  
 ```
-http://localhost:8080/file-storage-api/swagger-ui.html
+https://app.swaggerhub.com/apis/nope-89c/rest-api-basics-crud-test-variable/1.0.0#/
 ```
 
 ---

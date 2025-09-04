@@ -114,8 +114,9 @@ public class EventServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         try (BufferedReader reader = request.getReader()) {
             Gson gson = gsonBuilder.create();
-            Event event = gson.fromJson(reader, Event.class);
-            String json = gson.toJson(new EventDTO(eventRepository.update(event)));
+            EventDTO event = gson.fromJson(reader, EventDTO.class);
+            Event e = eventRepository.update(event.getUserId(), event.getFileId());
+            String json = gson.toJson(new EventDTO(e));
             out.write(json);
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (IllegalStateException | IllegalArgumentException e) {

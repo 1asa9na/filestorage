@@ -43,6 +43,15 @@ public class HibernateRepository<T, ID> implements GenericRepository<T, ID> {
     public T getById(ID id) throws RepositoryException {
         try (EntityManager em = getNewEntityManager()) {
             T entity = em.find(entityClass, id);
+            if (entity == null) {
+                throw new RepositoryException(
+                    entityClass.getName()
+                    + " with id "
+                    + id
+                    + " not found",
+                    new NullPointerException()
+                );
+            }
             return entity;
         } catch (IllegalArgumentException e) {
             throw new RepositoryException(e.getMessage(), e);
